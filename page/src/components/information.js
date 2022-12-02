@@ -1,5 +1,4 @@
 import axios from 'axios'
-const qs = require('qs');
 //require('dotenv').config()
 
 //const client_id = process.env.SPOTIFY_API_ID; // Your client id
@@ -39,11 +38,6 @@ export const get_albums = async (album_name) => {
     const access_token = await get_token();
 
     const api_url = 'https://api.spotify.com/v1/search'
-
-    //https://api.spotify.com/v1/search?type=album&market=US&limit=1
-    const headers = {
-        headers: { 'Authorization': `Bearer ${access_token}` }
-    }
 
     const params = {
         q: album_name,
