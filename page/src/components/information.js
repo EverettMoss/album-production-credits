@@ -1,10 +1,4 @@
 import axios from 'axios'
-//require('dotenv').config()
-
-//const client_id = process.env.SPOTIFY_API_ID; // Your client id
-//const client_secret = process.env.SPOTIFY_CLIENT_SECRET; // Your secret
-//const auth_token = Buffer.from(`${client_id}:${client_secret}`, 'utf-8').toString('base64');
-
 
 export const get_token = async () => {
     const client_id = 'ef2c3c44efe34ac49fd8d204c7432b25';
@@ -33,7 +27,7 @@ export const get_token = async () => {
     }
 }
 
-export const get_albums = async (album_name) => {
+export const get_album_id = async (album_name) => {
     var album_id;
     const access_token = await get_token();
 
@@ -54,10 +48,40 @@ export const get_albums = async (album_name) => {
             params: params
         });
         album_id = response['data']['albums']['items'][0]['id']
-        console.log(album_id)
+
     } catch (error) {
         console.log(error);
     }
 
     return album_id
 }
+
+export const get_tracks = async (album_id) => {
+    const access_token = await get_token();
+    var tracks = [];
+
+    const api_url = `https://api.spotify.com/v1/albums/${album_id}/tracks`
+
+    try {
+        const response = await axios.get(api_url, {
+            headers: {
+                'Authorization': `Bearer ${access_token}`
+            }
+        });
+
+        const song_data = response.data.items
+
+        song_data.forEach(song => {
+            const search_song = song.name + ' - ' + song.artists[0].name
+            tracks.push(search_song)
+        });
+
+
+    } catch (error) {
+        console.log(error);
+    }
+    
+    return tracks
+}
+
+

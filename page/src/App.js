@@ -1,6 +1,6 @@
 import './App.css';
 import { useState } from 'react';
-import {get_albums} from './components/information'
+import {get_album_id, get_tracks} from './components/information'
 
 function App() {
   const [album, setAlbum] = useState(null)
@@ -11,10 +11,9 @@ function App() {
 
   const handleSubmit = async (e) => {
     e.preventDefault()
-    console.log("title: " + album)
-    const token = await get_albums(album)
-    console.log(token)
-    //getTracks()
+    const id = await get_album_id(album)
+    const spotify_songs_list = get_tracks(id)
+    console.log(spotify_songs_list)
   };
   return (
     <div className="App">
