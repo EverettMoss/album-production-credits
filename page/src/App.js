@@ -1,6 +1,5 @@
 import './App.css';
 import { useState } from 'react';
-import {get_album_id, get_tracks, get_genius_song_ids2} from './components/information'
 import axios from 'axios'
 
 function App() {
@@ -15,16 +14,13 @@ function App() {
     
     
     await axios.post('http://localhost:8000/send_album', {
-      album: album
+      title: album
     })
     /*
     const id = await get_album_id(album)
     const spotify_songs_list = await get_tracks(id)
     console.log(spotify_songs_list)
     */
-    
-   const s = get_genius_song_ids2();
-
   };
   return (
     <div className="App">

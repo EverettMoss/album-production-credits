@@ -9,35 +9,35 @@ const app = express()
 app.use(bodyParser.json());
 app.use(cors())
 
-app.get('/get_credits', async (req, res) => {
 
-
-
-  /*
-  var config = {
-    method: 'get',
-    url: 'https://api.genius.com/search',
-    headers: {
-      'Authorization': 'Bearer gpL1EArH114jeZE2SmTU6jBbR-Q_liU23H1SyTvmPh_HQh1ZabtRqoz938evoypK'
-    },
-    params: {
-      'q': 'woodlawn amine'
-    }
-  };
-
-  const response = await axios(config)
-
-  res.json(response.data.response.hits[0])
-  */
-})
-
+//get album from front end
 app.post('/send_album', async (req, res) => {
   const album = await req.body;
+  const title = album.title
 
-  console.log(album)
+  //main
+  get_credits(title)
 
   res.json(req.body);
 });
+
+//main function 
+const get_credits = async (album_name) => {
+
+  //get album id from spotify
+  const spotify_album_id = await get_album_id(album_name)
+
+  //get all tracks from album
+  const spotify_tracks = await get_tracks(spotify_album_id)
+
+  //comvert all track titles to genius ids
+  const genius_track_ids = await get_genius_track_ids(spotify_tracks)
+
+  console.log(spotify_tracks)
+
+
+  //return album_id
+}
 
 //Spotify Requests
 const get_token = async () => {
@@ -111,7 +111,7 @@ const get_tracks = async (album_id) => {
 
     const song_data = response.data.items
     song_data.forEach(song => {
-      const search_song = song.name + ' - ' + song.artists[0].name
+      const search_song = song.name + ' ' + song.artists[0].name
       tracks.push(search_song)
     });
 
@@ -123,8 +123,20 @@ const get_tracks = async (album_id) => {
 }
 
 
-app.get('/', async (req, res) => {
-  /*
+//genius requests
+const get_genius_track_ids = async (spotify_tracks) => {
+  var genius_track_ids = []
+
+  spotify_tracks.forEach(async track => {
+    await genius_track_ids.push(get_genius_track_id(track))
+  });
+
+  console.log(genius_track_ids)
+
+  return genius_track_ids
+}
+
+const get_genius_track_id = async (track) => {
   var config = {
     method: 'get',
     url: 'https://api.genius.com/search',
@@ -132,15 +144,19 @@ app.get('/', async (req, res) => {
       'Authorization': 'Bearer gpL1EArH114jeZE2SmTU6jBbR-Q_liU23H1SyTvmPh_HQh1ZabtRqoz938evoypK'
     },
     params: {
-      'q': 'woodlawn amine'
+      'q': track
     }
   };
 
+  //TODO: match with artist wrap in try/catch
   const response = await axios(config)
+  const id = response.data.response.hits[0].result.id
 
-  res.json(response.data.response.hits[0])
-  */
-})
+  return id
+}
+
+
+
 
 app.listen(PORT, () => {
   console.log(`node running on ${PORT}`)
