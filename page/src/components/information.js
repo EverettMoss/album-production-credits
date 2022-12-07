@@ -1,5 +1,6 @@
 import axios from 'axios'
 
+//Spotify Requests
 export const get_token = async () => {
     const client_id = 'ef2c3c44efe34ac49fd8d204c7432b25';
     const client_secret = '7e731a4e91fb417a826f84b2491fd4a6';
@@ -70,18 +71,72 @@ export const get_tracks = async (album_id) => {
         });
 
         const song_data = response.data.items
-
         song_data.forEach(song => {
             const search_song = song.name + ' - ' + song.artists[0].name
             tracks.push(search_song)
         });
 
-
     } catch (error) {
         console.log(error);
     }
-    
+
     return tracks
 }
 
+export const get_genius_song_ids2 = async () => {
+    var all_spotify_tracks = [] //param
+    var count = 0
+    var genius_song_ids = []
 
+    all_spotify_tracks.push('helment steve lacy')
+
+    const BASE_URL = 'https://api.genius.com/search'
+    const CLIENT_ACCESS_TOKEN = 'gpL1EArH114jeZE2SmTU6jBbR-Q_liU23H1SyTvmPh_HQh1ZabtRqoz938evoypK'
+    const token = `Bearer ${CLIENT_ACCESS_TOKEN}`
+
+    var config = {
+        method: 'get',
+        url: 'https://api.genius.com/search',
+        headers: {
+            'Authorization': 'Bearer gpL1EArH114jeZE2SmTU6jBbR-Q_liU23H1SyTvmPh_HQh1ZabtRqoz938evoypK'
+        },
+        params: {
+            'q': 'woodlawn amine'
+        }
+    };
+
+    const response = await axios(config)
+
+    console.log(response.data.response.hits[0])
+
+
+
+
+    /*
+    all_spotify_tracks.forEach(async track => {
+        // static - steve lacy
+        const params = {
+            'q': track
+        }
+
+        const response = await axios.get(BASE_URL, {
+            headers: {
+                'Authorization': token
+            },
+            params: params
+        })
+        console.log(response.data)
+
+        /*
+        genius_song_id = get_song_id(song_search_info, artist.strip())
+        genius_song_ids.append(genius_song_id)
+        count += 1
+        print("SONG #", count, "/", len(track_names))
+
+        const search_song = song.name + ' - ' + song.artists[0].name
+        tracks.push(search_song)
+        */
+};
+
+/*
+*/
