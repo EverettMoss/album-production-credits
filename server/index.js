@@ -183,9 +183,28 @@ const get_song_data = async (genius_ids) => {
 
     //setting data to object
     song_info.title = all_song_data.title
-    song_info.artist = all_song_data.album.name ? all_song_data.album.name : '<single>'
+    song_info.album = all_song_data.album.name ? all_song_data.album.name : '<single>'
+    song_info.release_date = all_song_data.album.name ? all_song_data.release_date : 'unidentified'
 
- 
+    var producers = []
+    all_song_data.producer_artists.forEach(producer => {
+      producers.push(producer.name)  
+    });
+    song_info.producers = producers
+
+
+    var features = []
+    all_song_data.featured_artists.forEach(feature => {
+      features.push(feature.name)  
+    });
+    song_info.feautured_artists = features
+
+    var writers = []
+    all_song_data.writer_artists.forEach(writer => {
+      writers.push(writer.name)  
+    });
+    song_info.writers = writers
+      
     songs.push(song_info)
   }
 

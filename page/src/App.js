@@ -4,6 +4,7 @@ import axios from 'axios'
 
 function App() {
   const [album, setAlbum] = useState(null)
+  const [loading, setLoading] = useState(null)
 
   const updateAlbum = (e) => {
     setAlbum(e.target.value)
@@ -13,9 +14,11 @@ function App() {
     e.preventDefault()
 
     const url = 'http://localhost:8000/get_credits/' + album
+    setLoading(true)
     const info = await axios.get(url)
+    setLoading(false)
 
-    console.log(info)
+    console.log(info.data)
   };
   return (
     <div className="App">
@@ -27,6 +30,9 @@ function App() {
           submit
         </button>
       </form>
+      {loading && (
+        <p>Loading!</p>
+      )}
     </div>
   );
 }
