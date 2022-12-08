@@ -11,11 +11,11 @@ function App() {
 
   const handleSubmit = async (e) => {
     e.preventDefault()
-    
-    await axios.post('http://localhost:8000/send_album', {
-      title: album
-    })
- 
+
+    const url = 'http://localhost:8000/get_credits/' + album
+    const info = await axios.get(url)
+
+    console.log(info)
   };
   return (
     <div className="App">

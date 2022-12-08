@@ -11,19 +11,20 @@ app.use(cors())
 
 
 //get album from front end
-app.post('/send_album', async (req, res) => {
-  const album = await req.body;
-  const title = album.title
+app.get('/get_credits/:album', async (req, res) => {
+  const album = req.params.album;
 
   //main
-  get_credits(title)
+  console.log('start')
+  const song_data = await get_credits(album)
+  console.log('end')
 
-  res.json(req.body);
+  res.json(song_data)
 });
+
 
 //main function 
 const get_credits = async (album_name) => {
-
   //get album id from spotify
   const spotify_album_id = await get_album_id(album_name)
 
@@ -36,7 +37,9 @@ const get_credits = async (album_name) => {
   //get data for each song
   const song_data = await get_song_data(genius_track_ids)
 
-  //return song_data
+  console.log(song_data)
+
+  return song_data
 }
 
 //Spotify Requests
@@ -160,7 +163,7 @@ const get_song_data = async (genius_ids) => {
   const base_url = 'https://api.genius.com/songs/'
 
   for (let index = 0; index < genius_ids.length; index++) {
-    const data = {}
+    const song_info = {}
     const genius_id = genius_ids[index]
     const url = base_url + genius_id
 
@@ -176,18 +179,18 @@ const get_song_data = async (genius_ids) => {
     };
     const response = await axios(config)
 
-    const all_data = response.data.response.song
+    const all_song_data = response.data.response.song
 
     //setting data to object
-    data.producers = all_data.
+    song_info.title = all_song_data.title
+    song_info.artist = all_song_data.album.name ? all_song_data.album.name : '<single>'
+
  
-    songs.push(id)
+    songs.push(song_info)
   }
 
   return songs
 }
-
-
 
 
 app.listen(PORT, () => {
