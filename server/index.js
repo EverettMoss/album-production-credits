@@ -33,10 +33,10 @@ const get_credits = async (album_name) => {
   //comvert all track titles to genius ids
   const genius_track_ids = await get_genius_track_ids(spotify_tracks)
 
-  console.log(genius_track_ids)
+  //get data for each song
+  const song_data = await get_song_data(genius_track_ids)
 
-
-  //return album_id
+  //return song_data
 }
 
 //Spotify Requests
@@ -122,8 +122,7 @@ const get_tracks = async (album_id) => {
   return tracks
 }
 
-
-//genius requests
+//Genius requests
 const get_genius_track_ids = async (spotify_tracks) => {
   var genius_track_ids = []
 
@@ -153,6 +152,39 @@ const get_genius_track_id = async (track) => {
   const id = response.data.response.hits[0].result.id
 
   return id
+}
+
+const get_song_data = async (genius_ids) => {
+  var songs = []
+
+  const base_url = 'https://api.genius.com/songs/'
+
+  for (let index = 0; index < genius_ids.length; index++) {
+    const data = {}
+    const genius_id = genius_ids[index]
+    const url = base_url + genius_id
+
+    //make request
+    console.log(url)
+
+    var config = {
+      method: 'get',
+      url: url,
+      headers: {
+        'Authorization': 'Bearer gpL1EArH114jeZE2SmTU6jBbR-Q_liU23H1SyTvmPh_HQh1ZabtRqoz938evoypK'
+      }
+    };
+    const response = await axios(config)
+
+    const all_data = response.data.response.song
+
+    //setting data to object
+    data.producers = all_data.
+ 
+    songs.push(id)
+  }
+
+  return songs
 }
 
 
