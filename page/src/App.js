@@ -12,15 +12,10 @@ function App() {
   const handleSubmit = async (e) => {
     e.preventDefault()
     
-    
     await axios.post('http://localhost:8000/send_album', {
       title: album
     })
-    /*
-    const id = await get_album_id(album)
-    const spotify_songs_list = await get_tracks(id)
-    console.log(spotify_songs_list)
-    */
+ 
   };
   return (
     <div className="App">

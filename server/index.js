@@ -33,7 +33,7 @@ const get_credits = async (album_name) => {
   //comvert all track titles to genius ids
   const genius_track_ids = await get_genius_track_ids(spotify_tracks)
 
-  console.log(spotify_tracks)
+  console.log(genius_track_ids)
 
 
   //return album_id
@@ -127,11 +127,11 @@ const get_tracks = async (album_id) => {
 const get_genius_track_ids = async (spotify_tracks) => {
   var genius_track_ids = []
 
-  spotify_tracks.forEach(async track => {
-    await genius_track_ids.push(get_genius_track_id(track))
-  });
-
-  console.log(genius_track_ids)
+  for (let index = 0; index < spotify_tracks.length; index++) {
+    const track = spotify_tracks[index]
+    const id = await get_genius_track_id(track)
+    genius_track_ids.push(id)
+  }
 
   return genius_track_ids
 }
